@@ -1,5 +1,6 @@
 package csd.mida.xes.csdMidaXes;
 
+import org.apache.tomcat.jni.Time;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
@@ -49,6 +52,54 @@ public class helloController {
         log.setTextContent(name);
         doc.appendChild(log);
 
+        generateHeaders(doc, log);
+        generateTestTrace(doc, log);
+
+
+        TransformerFactory tf = TransformerFactory.newInstance();
+        try {
+            Transformer transformer = tf.newTransformer();
+            StringWriter writer = new StringWriter();
+            transformer.transform(new DOMSource(doc), new StreamResult(writer));
+            System.out.println(writer.getBuffer().toString());
+            return writer.getBuffer().toString();
+
+
+        } catch (TransformerConfigurationException e) {
+            e.printStackTrace();
+        } catch (TransformerException e) {
+            e.printStackTrace();
+        }
+
+        return new String ("we couldn't make ");
+        //return new hello(counter.incrementAndGet(),
+          //                  String.format(template, name));
+    }
+
+    private static Document convertStringToXMLDocument(String xmlString)
+    {
+        //Parser that produces DOM object trees from XML content
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+        //API to obtain DOM Document instance
+        DocumentBuilder builder = null;
+        try
+        {
+            //Create DocumentBuilder with default configuration
+            builder = factory.newDocumentBuilder();
+
+            //Parse the content to Document object
+            Document doc = builder.parse(new InputSource(new StringReader(xmlString)));
+            return doc;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void generateHeaders(Document doc, Element log) {
 
         /*
         <extension name="Concept" prefix="concept" uri="http://code.deckfour.org/xes/concept.xesext"/>
@@ -104,48 +155,45 @@ public class helloController {
 
         log.appendChild(globalEvent);
 
-
-        TransformerFactory tf = TransformerFactory.newInstance();
-        try {
-            Transformer transformer = tf.newTransformer();
-            StringWriter writer = new StringWriter();
-            transformer.transform(new DOMSource(doc), new StreamResult(writer));
-            System.out.println(writer.getBuffer().toString());
-            return writer.getBuffer().toString();
-
-
-        } catch (TransformerConfigurationException e) {
-            e.printStackTrace();
-        } catch (TransformerException e) {
-            e.printStackTrace();
-        }
-
-        return new String ("we couldn't make ");
-        //return new hello(counter.incrementAndGet(),
-          //                  String.format(template, name));
     }
 
-    private static Document convertStringToXMLDocument(String xmlString)
-    {
-        //Parser that produces DOM object trees from XML content
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    private void generateTestTrace(Document doc, Element log) {
 
-        //API to obtain DOM Document instance
-        DocumentBuilder builder = null;
-        try
-        {
-            //Create DocumentBuilder with default configuration
-            builder = factory.newDocumentBuilder();
+        Element trace = doc.createElement("trace");
+        Element trace2 = doc.createElement("trace");
 
-            //Parse the content to Document object
-            Document doc = builder.parse(new InputSource(new StringReader(xmlString)));
-            return doc;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return null;
+        generateEvent(doc, trace);
+        generateEvent(doc, trace2);
+
+        log.appendChild(trace);
     }
+
+    private void generateEvent(Document doc, Element trace) {
+        Element event1 = doc.createElement("hahahaha");
+        Element event2 = doc.createElement("event");
+
+        generateEventAttributes(doc, event1);
+        generateEventAttributes(doc, event2);
+
+        trace.appendChild(event1);
+        trace.appendChild(event2);
+
+    }
+
+    private void generateEventAttributes(Document doc, Element event) {
+        Element eventChild1 = doc.createElement("string");
+        eventChild1.setAttribute("key", "concept:name");
+        eventChild1.setAttribute("value", "cane");
+
+        Element eventChild2= doc.createElement("string");
+        eventChild2.setAttribute("key", "time:timestamp");
+        Date date = new Date();
+        eventChild2.setAttribute("value", String.valueOf(date.getTime()));
+
+        event.appendChild(eventChild1);
+        event.appendChild(eventChild2);
+
+    }
+
 
 }
