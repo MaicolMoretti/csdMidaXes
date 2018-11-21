@@ -1,10 +1,13 @@
 package csd.mida.xes.csdMidaXes;
 
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import csd.mida.xes.csdMidaXes.models.EventModel;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -15,24 +18,40 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 public class helloController {
-
-    private static final String template = "Hello, %s !";
-    private final AtomicLong counter = new AtomicLong();
 
     @RequestMapping(value = "/hello", produces = "text/xml; charset=utf-8")
 
     /*
     TODO The parameter "String name" is not used for now!
      */
-    public String hello(@RequestParam(value="name", defaultValue = "World") String name) {
+    public String hello(@RequestBody String jsonLog) {
+
+
+            //EventModel event = new ObjectMapper().readValue(jsonLog, EventModel.class);
+            //System.out.println(event.conceptName);
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+            List<EventModel> myEvents = mapper.readValue(jsonLog, new TypeReference<List<EventModel>>() {});
+            for (EventModel event : myEvents) {
+                System.out.println(event.conceptName + "   " + event.type + "   " + event.lifecycleTransition);                
+            }
+
+           
 
         // Create document
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -63,15 +82,11 @@ public class helloController {
 
         //Genero eventi
         ArrayList<Element> events1 = new ArrayList<>();
-        for(int i = 0; i < 3; i++)
-            events1.add(generateEvent(doc));
-        ArrayList<Element> events2 = new ArrayList<>();
-        for(int i = 0; i < 2; i++)
-            events2.add(generateEvent(doc));
+        for(int i = 0; i < myEvents.size(); i++)
+            events1.add(generateEvent(doc, myEvents.get(i)));
 
         //Genero tracce
         generateTrace(doc,log,events1);
-        generateTrace(doc,log,events2);
 
 
 
@@ -80,7 +95,6 @@ public class helloController {
             Transformer transformer = tf.newTransformer();
             StringWriter writer = new StringWriter();
             transformer.transform(new DOMSource(doc), new StreamResult(writer));
-            System.out.println(writer.getBuffer().toString());
             return writer.getBuffer().toString();
 
 
@@ -88,6 +102,11 @@ public class helloController {
             e.printStackTrace();
         } catch (TransformerException e) {
             e.printStackTrace();
+        }
+
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
         }
 
         return new String ("we couldn't make ");
@@ -164,11 +183,16 @@ public class helloController {
         globalEventChild1.setAttribute("value", "name");
 
         Element globalEventChild2 = doc.createElement("string");
-        globalEventChild2.setAttribute("key", "time:timestamp");
-        globalEventChild2.setAttribute("value", "2011-04-13T14:02:31.199+02:00");
+        globalEventChild2.setAttribute("key", "type");
+        globalEventChild2.setAttribute("value", "Send Message Task");
+
+        Element globalEventChild3 = doc.createElement("string");
+        globalEventChild3.setAttribute("key", "time:timestamp");
+        globalEventChild3.setAttribute("value", "2011-04-13T14:02:31.199+02:00");
 
         globalEvent.appendChild(globalEventChild1);
         globalEvent.appendChild(globalEventChild2);
+        globalEvent.appendChild(globalEventChild3);
 
         log.appendChild(globalEvent);
 
@@ -193,9 +217,9 @@ public class helloController {
      * @param doc documento di riferimento
      * @return evento generato
      */
-    private Element generateEvent(Document doc) {
+    private Element generateEvent(Document doc, EventModel myEvent) {
         Element event = doc.createElement("event");
-        ArrayList<Element> eventAttributes = generateEventAttributes(doc);
+        ArrayList<Element> eventAttributes = generateEventAttributes(doc, myEvent);
         for (Element eventAttribute: eventAttributes)
             event.appendChild(eventAttribute);
         return event;
@@ -205,7 +229,7 @@ public class helloController {
      * Genero gli attributi di un evento
      * @param doc documento di riferimento
      */
-    private ArrayList<Element> generateEventAttributes(Document doc) {
+    private ArrayList<Element> generateEventAttributes(Document doc, EventModel myEvent) {
         /*
         EXAMPLE
         <event>
@@ -216,27 +240,21 @@ public class helloController {
 		</event>
          */
         Element eventChild1 = doc.createElement("string");
-        eventChild1.setAttribute("key", "concept:instance");
-        eventChild1.setAttribute("value", randomString());
-
-        Element eventChild2= doc.createElement("date");
-        eventChild2.setAttribute("key", "time:timestamp");
-        eventChild2.setAttribute("value", String.valueOf((new Date()).getTime()));
-
-
-        Element eventChild3 = doc.createElement("string");
         eventChild1.setAttribute("key", "concept:name");
-        eventChild1.setAttribute("value", randomString());
+        eventChild1.setAttribute("value", myEvent.conceptName);
 
-        Element eventChild4 = doc.createElement("string");
-        eventChild1.setAttribute("key", "lifecycle:transition");
-        eventChild1.setAttribute("value", randomString());
+        Element eventChild2 = doc.createElement("string");
+        eventChild2.setAttribute("key", "type");
+        eventChild2.setAttribute("value", myEvent.type);
+
+        Element eventChild3= doc.createElement("date");
+        eventChild3.setAttribute("key", "time:timestamp");
+        eventChild3.setAttribute("value", myEvent.lifecycleTransition);
 
         ArrayList<Element> eventAttributes = new ArrayList<>();
         eventAttributes.add(eventChild1);
         eventAttributes.add(eventChild2);
         eventAttributes.add(eventChild3);
-        eventAttributes.add(eventChild4);
         return eventAttributes;
 
     }
