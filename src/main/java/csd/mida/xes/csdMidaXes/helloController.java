@@ -1,13 +1,14 @@
 package csd.mida.xes.csdMidaXes;
-
+//*****************REQUIREMENTS******************
+//Spring
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
+//EventModel
 import csd.mida.xes.csdMidaXes.models.EventModel;
-
+//XML tools
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -17,15 +18,14 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
+//Streaming parser XML
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+//Java standard library
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @RestController
 public class helloController {
@@ -39,8 +39,11 @@ public class helloController {
         //System.out.println(event.conceptName);
         ObjectMapper mapper = new ObjectMapper();
         try {
-            List<EventModel> myEvents = mapper.readValue(jsonLog, new TypeReference<List<EventModel>>() {
-            });
+
+            //Crea una lista di eventi letti dal JSON fornito dalla richiesta
+            List<EventModel> myEvents = mapper.readValue(jsonLog, new TypeReference<List<EventModel>>() {});
+
+            //Mostra ogni evento acquisito
             for (EventModel event : myEvents)
                 System.out.println(event.conceptName + "   " + event.type + "   " + event.lifecycleTransition);
 
@@ -55,12 +58,6 @@ public class helloController {
             }
 
 
-        /*
-        SUPER TODO https://stackoverflow.com/questions/34864604/how-to-add-two-or-more-elements-of-the-same-name-at-the-same-hierarchical-level
-        Non ho avuto tempo di farlo ma Fixa il problema dell'appendChild con lo stesso "name" che in XML puro non è possibile fare
-        Possibile scappatoia: aggiungere uno spazio dopo il name che tanto i parser li skippano
-         */
-
             // Creation of a document
             Document doc = docBuilder.newDocument();
 
@@ -72,7 +69,7 @@ public class helloController {
             this.generateHeaders(doc, log);
 
 
-            //Genero eventi
+            //Genero eventi acquisiti
             ArrayList<Element> events1 = new ArrayList<>();
             for (int i = 0; i < myEvents.size(); i++)
                 events1.add(generateEvent(doc, myEvents.get(i)));
@@ -101,8 +98,7 @@ public class helloController {
         }
 
         return new String("we couldn't make ");
-        //return new hello(counter.incrementAndGet(),
-        //                  String.format(template, name));
+        //return new hello(counter.incrementAndGet(), String.format(template, name));
     }
 
 
@@ -254,28 +250,4 @@ public class helloController {
         return eventAttributes;
 
     }
-
-
-    /**
-     * Generatore di stringhe
-     *
-     * @return stringa casuale
-     */
-    public String randomString() {
-
-        int leftLimit = 97; // letter 'a'
-        int rightLimit = 122; // letter 'z'
-        int targetStringLength = 12;
-        Random random = new Random();
-        StringBuilder buffer = new StringBuilder(targetStringLength);
-        for (int i = 0; i < targetStringLength; i++) {
-            int randomLimitedInt = leftLimit + (int)
-                    (random.nextFloat() * (rightLimit - leftLimit + 1));
-            buffer.append((char) randomLimitedInt);
-        }
-        String generatedString = buffer.toString();
-
-        return generatedString;
-    }
-
 }
