@@ -36,31 +36,27 @@ public class helloController {
 
     @RequestMapping(value = "/hello", produces = "text/xml; charset=utf-8")
 
-    /*
-    TODO The parameter "String name" is not used for now!
-     */
     public String hello(@RequestBody String jsonLog) {
 
 
-            //EventModel event = new ObjectMapper().readValue(jsonLog, EventModel.class);
-            //System.out.println(event.conceptName);
-            ObjectMapper mapper = new ObjectMapper();
-            try {
-            List<EventModel> myEvents = mapper.readValue(jsonLog, new TypeReference<List<EventModel>>() {});
-            for (EventModel event : myEvents) {
-                System.out.println(event.conceptName + "   " + event.type + "   " + event.lifecycleTransition);                
-            }
-
-           
-
-        // Create document
-        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder docBuilder = null;
+        //EventModel event = new ObjectMapper().readValue(jsonLog, EventModel.class);
+        //System.out.println(event.conceptName);
+        ObjectMapper mapper = new ObjectMapper();
         try {
-            docBuilder = docFactory.newDocumentBuilder();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        }
+            List<EventModel> myEvents = mapper.readValue(jsonLog, new TypeReference<List<EventModel>>() {
+            });
+            for (EventModel event : myEvents)
+                System.out.println(event.conceptName + "   " + event.type + "   " + event.lifecycleTransition);
+
+
+            // Create document
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = null;
+            try {
+                docBuilder = docFactory.newDocumentBuilder();
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            }
 
 
         /*
@@ -69,58 +65,58 @@ public class helloController {
         Possibile scappatoia: aggiungere uno spazio dopo il name che tanto i parser li skippano
          */
 
-        // Creation of a document
-        Document doc = docBuilder.newDocument();
+            // Creation of a document
+            Document doc = docBuilder.newDocument();
 
 
-        // Root element
-        Element log = this.generateRoot(doc);
+            // Root element
+            Element log = this.generateRoot(doc);
 
-        //Headers element
-        this.generateHeaders(doc, log);
-
-
-        //Genero eventi
-        ArrayList<Element> events1 = new ArrayList<>();
-        for(int i = 0; i < myEvents.size(); i++)
-            events1.add(generateEvent(doc, myEvents.get(i)));
-
-        //Genero tracce
-        generateTrace(doc,log,events1);
+            //Headers element
+            this.generateHeaders(doc, log);
 
 
+            //Genero eventi
+            ArrayList<Element> events1 = new ArrayList<>();
+            for (int i = 0; i < myEvents.size(); i++)
+                events1.add(generateEvent(doc, myEvents.get(i)));
 
-        TransformerFactory tf = TransformerFactory.newInstance();
-        try {
-            Transformer transformer = tf.newTransformer();
-            StringWriter writer = new StringWriter();
-            transformer.transform(new DOMSource(doc), new StreamResult(writer));
-            return writer.getBuffer().toString();
+            //Genero tracce
+            generateTrace(doc, log, events1);
 
 
-        } catch (TransformerConfigurationException e) {
-            e.printStackTrace();
-        } catch (TransformerException e) {
-            e.printStackTrace();
-        }
+            TransformerFactory tf = TransformerFactory.newInstance();
+            try {
+                Transformer transformer = tf.newTransformer();
+                StringWriter writer = new StringWriter();
+                transformer.transform(new DOMSource(doc), new StreamResult(writer));
+                return writer.getBuffer().toString();
+
+
+            } catch (TransformerConfigurationException e) {
+                e.printStackTrace();
+            } catch (TransformerException e) {
+                e.printStackTrace();
+            }
 
         } catch (IOException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
 
-        return new String ("we couldn't make ");
+        return new String("we couldn't make ");
         //return new hello(counter.incrementAndGet(),
-          //                  String.format(template, name));
+        //                  String.format(template, name));
     }
 
 
     /**
      * Genero root (tag log)
+     *
      * @param doc documento di riferimento
      * @return log generato
      */
-    private Element generateRoot(Document doc){
+    private Element generateRoot(Document doc) {
         Element log = doc.createElement("log");
         log.setAttribute("xes.version", "1.0");
         log.setAttribute("xes.features", "nested-attributes");
@@ -132,6 +128,7 @@ public class helloController {
     /**
      * Genero gli header (extension and classifier)
      * TODO Aggiungi classifier
+     *
      * @param doc documento di riferimento
      * @param log log di riferimento
      */
@@ -170,7 +167,7 @@ public class helloController {
 
         Element globalTraceChild = doc.createElement("string");
         globalTraceChild.setAttribute("key", "concept:name");
-        globalTraceChild.setAttribute("value","name");
+        globalTraceChild.setAttribute("value", "name");
 
         globalTrace.appendChild(globalTraceChild);
         log.appendChild(globalTrace);
@@ -201,32 +198,35 @@ public class helloController {
 
     /**
      * Genero una traccia
-     * @param doc documento di riferimento
-     * @param log log di riferimento
+     *
+     * @param doc    documento di riferimento
+     * @param log    log di riferimento
      * @param events eventi da aggiungere alla traccia
      */
     private void generateTrace(Document doc, Element log, ArrayList<Element> events) {
         Element trace = doc.createElement("trace");
-        for(Element event : events)
+        for (Element event : events)
             trace.appendChild(event);
         log.appendChild(trace);
     }
 
     /**
      * Genero un evento
+     *
      * @param doc documento di riferimento
      * @return evento generato
      */
     private Element generateEvent(Document doc, EventModel myEvent) {
         Element event = doc.createElement("event");
         ArrayList<Element> eventAttributes = generateEventAttributes(doc, myEvent);
-        for (Element eventAttribute: eventAttributes)
+        for (Element eventAttribute : eventAttributes)
             event.appendChild(eventAttribute);
         return event;
     }
 
     /**
      * Genero gli attributi di un evento
+     *
      * @param doc documento di riferimento
      */
     private ArrayList<Element> generateEventAttributes(Document doc, EventModel myEvent) {
@@ -247,7 +247,7 @@ public class helloController {
         eventChild2.setAttribute("key", "type");
         eventChild2.setAttribute("value", myEvent.type);
 
-        Element eventChild3= doc.createElement("date");
+        Element eventChild3 = doc.createElement("date");
         eventChild3.setAttribute("key", "time:timestamp");
         eventChild3.setAttribute("value", myEvent.lifecycleTransition);
 
@@ -262,6 +262,7 @@ public class helloController {
 
     /**
      * Generatore di stringhe
+     *
      * @return stringa casuale
      */
     public String randomString() {
@@ -281,38 +282,4 @@ public class helloController {
         return generatedString;
     }
 
-    /*
-                  _   _  ____ _______   _    _  _____ ______ _____
-                 | \ | |/ __ \__   __| | |  | |/ ____|  ____|  __ \
-                 |  \| | |  | | | |    | |  | | (___ | |__  | |  | |
-                 | . ` | |  | | | |    | |  | |\___ \|  __| | |  | |
-                 | |\  | |__| | | |    | |__| |____) | |____| |__| |
-                 |_| \_|\____/  |_|     \____/|_____/|______|_____/
-
-
-
-    private static Document convertStringToXMLDocument(String xmlString)
-    {
-        //Parser that produces DOM object trees from XML content
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-
-        //API to obtain DOM Document instance
-        DocumentBuilder builder = null;
-        try
-        {
-            //Create DocumentBuilder with default configuration
-            builder = factory.newDocumentBuilder();
-
-            //Parse the content to Document object
-            Document doc = builder.parse(new InputSource(new StringReader(xmlString)));
-            return doc;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    */
 }
