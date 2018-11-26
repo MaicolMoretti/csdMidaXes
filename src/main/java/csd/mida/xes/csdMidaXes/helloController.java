@@ -159,7 +159,7 @@ public class helloController {
 
         Element globalTraceChild = doc.createElement("string");
         globalTraceChild.setAttribute("key", "concept:name");
-        globalTraceChild.setAttribute("value", "name");
+        globalTraceChild.setAttribute("value", "");
 
         globalTrace.appendChild(globalTraceChild);
         log.appendChild(globalTrace);
@@ -169,13 +169,13 @@ public class helloController {
 
         Element globalEventChild1 = doc.createElement("string");
         globalEventChild1.setAttribute("key", "concept:name");
-        globalEventChild1.setAttribute("value", "name");
+        globalEventChild1.setAttribute("value", "");
 
         Element globalEventChild2 = doc.createElement("string");
         globalEventChild2.setAttribute("key", "type");
         globalEventChild2.setAttribute("value", "Send Message Task");
 
-        Element globalEventChild3 = doc.createElement("string");
+        Element globalEventChild3 = doc.createElement("date");
         globalEventChild3.setAttribute("key", "time:timestamp");
         globalEventChild3.setAttribute("value", "2011-04-13T14:02:31.199+02:00");
 
@@ -184,6 +184,25 @@ public class helloController {
         globalEvent.appendChild(globalEventChild3);
 
         log.appendChild(globalEvent);
+
+        /*
+        <classifier name="Event Name" keys="concept:name"/>
+	    <classifier name="(Event Name AND Lifecycle transition)" keys="concept:name time:timestamp"/>
+	    */
+
+        Element classifierTime = doc.createElement("classifier");
+        classifierTime.setAttribute("name", "Event Name");
+        classifierTime.setAttribute("key", "concept:name");
+
+
+        Element classifier2Time = doc.createElement("classifier");
+        classifier2Time.setAttribute("name", "Event Name and TimeStamp");
+        classifier2Time.setAttribute("key", "concept:name time:timestamp");
+
+
+        log.appendChild(classifierTime);
+        log.appendChild(classifier2Time);
+
 
     }
 
@@ -197,6 +216,10 @@ public class helloController {
      */
     private void generateTrace(Document doc, Element log, ArrayList<Element> events) {
         Element trace = doc.createElement("trace");
+        Element traceChild = doc.createElement("string");
+        traceChild.setAttribute("key", "concept:name");
+        traceChild.setAttribute("value", "Trace 1");
+        trace.appendChild(traceChild);
         for (Element event : events)
             trace.appendChild(event);
         log.appendChild(trace);
