@@ -1,4 +1,6 @@
 package csd.mida.xes.csdMidaXes;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
 //*****************REQUIREMENTS******************
 //Spring
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +32,7 @@ import java.util.List;
 @RestController
 public class helloController {
 
+    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/hello", produces = "text/xml; charset=utf-8")
 
     public String hello(@RequestBody String jsonLog) {
@@ -266,7 +269,13 @@ public class helloController {
         eventChild3.setAttribute("key", "time:timestamp");
         eventChild3.setAttribute("value", myEvent.lifecycleTransition);
 
+        Element eventChild4 = doc.createElement("string");
+        eventChild4.setAttribute("key", "id");
+        eventChild4.setAttribute("value", myEvent.id);
+
+
         ArrayList<Element> eventAttributes = new ArrayList<>();
+        eventAttributes.add(eventChild4);
         eventAttributes.add(eventChild1);
         eventAttributes.add(eventChild2);
         eventAttributes.add(eventChild3);
