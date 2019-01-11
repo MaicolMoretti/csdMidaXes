@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class helloController {
@@ -132,6 +133,7 @@ public class helloController {
         /*
         <extension name="Concept" prefix="concept" uri="http://code.deckfour.org/xes/concept.xesext"/>
 	    <extension name="Time" prefix="time" uri="http://code.deckfour.org/xes/time.xesext"/>
+	    <extension name=“Identity” prefix=“identity” uri="http://www.xes-standard.org/identity.xesext"/>
          */
 
 
@@ -145,30 +147,39 @@ public class helloController {
         extensionTime.setAttribute("prefix", "time");
         extensionTime.setAttribute("uri", "http://code.deckfour.org/xes/time.xesext");
 
+
+
         log.appendChild(extensionConcept);
         log.appendChild(extensionTime);
 
+
+
         /*
            <global scope="trace">
-		        <string key="concept:name" value="name"/>
-	        </global>
-            <global scope="event">
+                <id key="identity:id" value="AAE527A9-1929-49A2-AB4A-147CD5D2ADD5"/>
                 <string key="concept:name" value="name"/>
+            </global>
+            <global scope="event">
+                <id key="identity:id" value="9C25102D-21F3-4361-84C7-DA8BBF6953BC"/>
+                <string key="concept:name" value=""/>
+                <string key="type" value="Send Message Task"/>
                 <date key="time:timestamp" value="2011-04-13T14:02:31.199+02:00"/>
             </global>
 	    */
         Element globalTrace = doc.createElement("global");
         globalTrace.setAttribute("scope", "trace");
 
-        Element globalTraceChild = doc.createElement("string");
-        globalTraceChild.setAttribute("key", "concept:name");
-        globalTraceChild.setAttribute("value", "");
+        Element globalTraceChild1 = doc.createElement("string");
+        globalTraceChild1.setAttribute("key", "concept:name");
+        globalTraceChild1.setAttribute("value", "");
 
-        globalTrace.appendChild(globalTraceChild);
+
+        globalTrace.appendChild(globalTraceChild1);
         log.appendChild(globalTrace);
 
         Element globalEvent = doc.createElement("global");
         globalEvent.setAttribute("scope", "event");
+
 
         Element globalEventChild1 = doc.createElement("string");
         globalEventChild1.setAttribute("key", "concept:name");
@@ -176,11 +187,11 @@ public class helloController {
 
         Element globalEventChild2 = doc.createElement("string");
         globalEventChild2.setAttribute("key", "type");
-        globalEventChild2.setAttribute("value", "Send Message Task");
+        globalEventChild2.setAttribute("value", "");
 
         Element globalEventChild3 = doc.createElement("date");
         globalEventChild3.setAttribute("key", "time:timestamp");
-        globalEventChild3.setAttribute("value", "2011-04-13T14:02:31.199+02:00");
+        globalEventChild3.setAttribute("value", "");
 
         globalEvent.appendChild(globalEventChild1);
         globalEvent.appendChild(globalEventChild2);
@@ -218,11 +229,16 @@ public class helloController {
      * @param events eventi da aggiungere alla traccia
      */
     private void generateTrace(Document doc, Element log, ArrayList<Element> events) {
+
+        UUID uuid = UUID.randomUUID();
+
         Element trace = doc.createElement("trace");
-        Element traceChild = doc.createElement("string");
-        traceChild.setAttribute("key", "concept:name");
-        traceChild.setAttribute("value", "Trace 1");
-        trace.appendChild(traceChild);
+
+        Element traceChild1 = doc.createElement("string");
+        traceChild1.setAttribute("key", "concept:name");
+        traceChild1.setAttribute("value", "Trace 1");
+        trace.appendChild(traceChild1);
+
         for (Element event : events)
             trace.appendChild(event);
         log.appendChild(trace);
@@ -252,11 +268,15 @@ public class helloController {
         EXAMPLE
         <event>
 			<string key="concept:instance" value="0"/>
-			<string key="lifecycle:transition" value="complete"/>
 			<date key="time:timestamp" value="2014-09-04T10:19:00.000+02:00"/>
 			<string key="concept:name" value="Generazione-132"/>
 		</event>
          */
+
+
+        ArrayList<Element> eventAttributes = new ArrayList<>();
+
+
         Element eventChild1 = doc.createElement("string");
         eventChild1.setAttribute("key", "concept:name");
         eventChild1.setAttribute("value", myEvent.conceptName);
@@ -269,13 +289,31 @@ public class helloController {
         eventChild3.setAttribute("key", "time:timestamp");
         eventChild3.setAttribute("value", myEvent.lifecycleTransition);
 
-        Element eventChild4 = doc.createElement("string");
-        eventChild4.setAttribute("key", "id");
-        eventChild4.setAttribute("value", myEvent.id);
+        // for each piece of data generate an eventChild
+
+        if(myEvent.data.size() > 0 ) {
+
+            for (String data : myEvent.data) {
 
 
-        ArrayList<Element> eventAttributes = new ArrayList<>();
-        eventAttributes.add(eventChild4);
+                String[] parts = data.split(", ");
+
+                for (String part : parts) {
+                    // remove all white space
+                    String[] keys_and_values = part.split(":");
+
+                    //System.out.println(keys_and_values);
+
+                    Element eventChildData = doc.createElement("string");
+                    eventChildData.setAttribute("key", keys_and_values[0].trim());
+                    eventChildData.setAttribute("value", keys_and_values[1].trim());
+                    eventAttributes.add(eventChildData);
+                }
+
+            }
+
+        }
+
         eventAttributes.add(eventChild1);
         eventAttributes.add(eventChild2);
         eventAttributes.add(eventChild3);

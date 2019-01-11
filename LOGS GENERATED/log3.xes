@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<log openxes.version="1.0RC7" xes.features="nested-attributes" xes.version="1.0">
+    <extension name="Concept" prefix="concept" uri="http://code.deckfour.org/xes/concept.xesext"/>
+    <extension name="Time" prefix="time" uri="http://code.deckfour.org/xes/time.xesext"/>
+    <global scope="trace">
+        <string key="concept:name" value=""/>
+    </global>
+    <global scope="event">
+        <string key="concept:name" value=""/>
+        <string key="type" value="Send Message Task"/>
+        <date key="time:timestamp" value="2011-04-13T14:02:31.199+02:00"/>
+    </global>
+    <classifier key="concept:name" name="Event Name"/>
+    <classifier key="concept:name time:timestamp" name="Event Name and TimeStamp"/>
+    <trace>
+        <string key="concept:name" value="Trace 1"/>
+        <event>
+            <string key="concept:name" value="Process 1"/>
+            <string key="type" value="bpmn:Process"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:35.018Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Travel &#10;Booking"/>
+            <string key="type" value="bpmn:StartEvent"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:35.024Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Require Travel Quotes"/>
+            <string key="type" value="bpmn:SendTask"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:37.042Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Process 2"/>
+            <string key="type" value="bpmn:Process"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:38.488Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Quotes&#10;Management"/>
+            <string key="type" value="bpmn:StartEvent"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:38.507Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Require Agencies Quotes"/>
+            <string key="type" value="bpmn:SendTask"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:40.011Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Process 3"/>
+            <string key="type" value="bpmn:Process"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:41.554Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Travel Transaction"/>
+            <string key="type" value="bpmn:StartEvent"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:41.569Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Process 4"/>
+            <string key="type" value="bpmn:Process"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:41.575Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Travel Transaction"/>
+            <string key="type" value="bpmn:StartEvent"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:41.609Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Process 5"/>
+            <string key="type" value="bpmn:Process"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:41.615Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Travel Transaction"/>
+            <string key="type" value="bpmn:StartEvent"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:41.648Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Process 6"/>
+            <string key="type" value="bpmn:Process"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:41.655Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Travel Transaction"/>
+            <string key="type" value="bpmn:StartEvent"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:41.691Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Check Travel Availability"/>
+            <string key="type" value="bpmn:Task"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:43.304Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Check Travel Availability"/>
+            <string key="type" value="bpmn:Task"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:43.370Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Check Travel Availability"/>
+            <string key="type" value="bpmn:Task"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:43.438Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Check Travel Availability"/>
+            <string key="type" value="bpmn:Task"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:43.504Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Calculate Travel Quote"/>
+            <string key="type" value="bpmn:Task"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:44.902Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Calculate Travel Quote"/>
+            <string key="type" value="bpmn:Task"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:45.037Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Calculate Travel Quote"/>
+            <string key="type" value="bpmn:Task"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:45.169Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Calculate Travel Quote"/>
+            <string key="type" value="bpmn:Task"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:45.303Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Send Quote"/>
+            <string key="type" value="bpmn:SendTask"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:46.487Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Send Quote"/>
+            <string key="type" value="bpmn:SendTask"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:46.703Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Send Quote"/>
+            <string key="type" value="bpmn:SendTask"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:46.886Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Send Quote"/>
+            <string key="type" value="bpmn:SendTask"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:47.104Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Receive and Combine Quotes"/>
+            <string key="type" value="bpmn:ReceiveTask"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:48.905Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Send Quotes"/>
+            <string key="type" value="bpmn:SendTask"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:50.436Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Receive Travel Quotes"/>
+            <string key="type" value="bpmn:ReceiveTask"/>
+            <date key="time:timestamp" value="2019-01-11T17:44:54.787Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Select and Confirm a Travel Quote"/>
+            <string key="type" value="bpmn:SendTask"/>
+            <date key="time:timestamp" value="2019-01-11T17:45:16.695Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Travel&#10;Booked"/>
+            <string key="type" value="bpmn:Process"/>
+            <date key="time:timestamp" value="2019-01-11T17:45:21.374Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Process 1"/>
+            <string key="type" value="bpmn:Process"/>
+            <date key="time:timestamp" value="2019-01-11T17:45:21.376Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Receive Selected Quote"/>
+            <string key="type" value="bpmn:ReceiveTask"/>
+            <date key="time:timestamp" value="2019-01-11T17:45:21.381Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Send Feedback to Agencies"/>
+            <string key="type" value="bpmn:SendTask"/>
+            <date key="time:timestamp" value="2019-01-11T17:45:22.911Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Quotes&#10;Managed"/>
+            <string key="type" value="bpmn:Process"/>
+            <date key="time:timestamp" value="2019-01-11T17:45:24.457Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Process 2"/>
+            <string key="type" value="bpmn:Process"/>
+            <date key="time:timestamp" value="2019-01-11T17:45:24.458Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Receive Quote Feedback"/>
+            <string key="type" value="bpmn:ReceiveTask"/>
+            <date key="time:timestamp" value="2019-01-11T17:45:24.476Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Receive Quote Feedback"/>
+            <string key="type" value="bpmn:ReceiveTask"/>
+            <date key="time:timestamp" value="2019-01-11T17:45:24.525Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Receive Quote Feedback"/>
+            <string key="type" value="bpmn:ReceiveTask"/>
+            <date key="time:timestamp" value="2019-01-11T17:45:24.582Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Receive Quote Feedback"/>
+            <string key="type" value="bpmn:ReceiveTask"/>
+            <date key="time:timestamp" value="2019-01-11T17:45:24.624Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Is quote accepted?"/>
+            <string key="type" value="bpmn:ExclusiveGateway"/>
+            <date key="time:timestamp" value="2019-01-11T17:45:26.208Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Is quote accepted?"/>
+            <string key="type" value="bpmn:ExclusiveGateway"/>
+            <date key="time:timestamp" value="2019-01-11T17:45:26.276Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Is quote accepted?"/>
+            <string key="type" value="bpmn:ExclusiveGateway"/>
+            <date key="time:timestamp" value="2019-01-11T17:45:26.339Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Is quote accepted?"/>
+            <string key="type" value="bpmn:ExclusiveGateway"/>
+            <date key="time:timestamp" value="2019-01-11T17:45:26.403Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Save Transaction"/>
+            <string key="type" value="bpmn:Task"/>
+            <date key="time:timestamp" value="2019-01-11T17:45:27.821Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Transaction Aborted"/>
+            <string key="type" value="bpmn:Process"/>
+            <date key="time:timestamp" value="2019-01-11T17:45:27.955Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Process 4"/>
+            <string key="type" value="bpmn:Process"/>
+            <date key="time:timestamp" value="2019-01-11T17:45:27.956Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Transaction Aborted"/>
+            <string key="type" value="bpmn:Process"/>
+            <date key="time:timestamp" value="2019-01-11T17:45:28.137Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Process 5"/>
+            <string key="type" value="bpmn:Process"/>
+            <date key="time:timestamp" value="2019-01-11T17:45:28.139Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Transaction Aborted"/>
+            <string key="type" value="bpmn:Process"/>
+            <date key="time:timestamp" value="2019-01-11T17:45:28.188Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Process 6"/>
+            <string key="type" value="bpmn:Process"/>
+            <date key="time:timestamp" value="2019-01-11T17:45:28.189Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Transaction Performed"/>
+            <string key="type" value="bpmn:Process"/>
+            <date key="time:timestamp" value="2019-01-11T17:45:29.422Z"/>
+        </event>
+        <event>
+            <string key="concept:name" value="Process 3"/>
+            <string key="type" value="bpmn:Process"/>
+            <date key="time:timestamp" value="2019-01-11T17:45:29.424Z"/>
+        </event>
+    </trace>
+</log>

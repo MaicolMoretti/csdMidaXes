@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<log openxes.version="1.0RC7" xes.features="nested-attributes" xes.version="1.0">
+    <extension name="Identity" prefix="identity" uri="http://www.xes-standard.org/identity.xesext"/>
+    <extension name="Concept" prefix="concept" uri="http://code.deckfour.org/xes/concept.xesext"/>
+    <extension name="Lifecycle" prefix="lifecycle" uri="http://www.xes-standard.org/lifecycle.xesext"/>
+    <extension name="Time" prefix="time" uri="http://code.deckfour.org/xes/time.xesext"/>
+    <global scope="trace">
+        <id key="identity:id" value=""/>
+        <string key="concept:name" value=""/>
+    </global>
+    <global scope="event">
+        <id key="identity:id" value=""/>
+        <string key="concept:name" value=""/>
+        <string key="type" value=""/>
+        <date key="time:timestamp" value=""/>
+        <string key="lifecycle:transition" value=""/>
+    </global>
+    <classifier keys="identity:id" name="Event Name"/>
+    <trace>
+        <string key="concept:name" value="Trace 1"/>
+        <id key="identity:id" value="660456d7-2bbf-490b-a218-ca74188e5a88"/>
+        <event>
+            <id key="identity:id" value="mangio"/>
+            <string key="concept:name" value="Process 1"/>
+            <string key="lifecycle:transition" value="start"/>
+            <string key="type" value="bpmn:Process"/>
+            <date key="time:timestamp" value="2019-01-11T16:10:34.739Z"/>
+        </event>
+        <event>
+            <id key="identity:id" value="bevo"/>
+            <string key="concept:name" value="Process 2"/>
+            <string key="type" value="bpmn:SendTask"/>
+            <string key="lifecycle:transition" value="start"/>
+            <date key="time:timestamp" value="2019-01-11T16:12:36.880Z"/>
+        </event>
+        <event>
+            <id key="identity:id" value="bevo"/>
+            <string key="concept:name" value="Process 2"/>
+            <string key="type" value="bpmn:Process"/>
+            <date key="time:timestamp" value="2019-01-11T16:14:34.739Z"/>
+            <string key="lifecycle:transition" value="start"/>
+        </event>
+        <event>
+            <id key="identity:id" value="mangio"/>
+            <string key="concept:name" value="Process 1"/>
+            <string key="type" value="bpmn:Process"/>
+            <date key="time:timestamp" value="2019-01-11T16:20:34.739Z"/>
+            <string key="lifecycle:transition" value="start"/>
+        </event>
+    </trace>
+</log>
