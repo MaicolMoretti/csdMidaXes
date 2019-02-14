@@ -1,5 +1,6 @@
 package csd.mida.xes.csdMidaXes;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 //*****************REQUIREMENTS******************
 //Spring
@@ -29,6 +30,8 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import org.apache.commons.*;
 
 @RestController
 public class helloController {
@@ -87,7 +90,90 @@ public class helloController {
                 Transformer transformer = tf.newTransformer();
                 StringWriter writer = new StringWriter();
                 transformer.transform(new DOMSource(doc), new StreamResult(writer));
+
                 return writer.getBuffer().toString();
+
+
+            } catch (TransformerConfigurationException e) {
+                e.printStackTrace();
+            } catch (TransformerException e) {
+                e.printStackTrace();
+            }
+
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+
+        return new String("we couldn't make ");
+        //return new hello(counter.incrementAndGet(), String.format(template, name));
+    }
+
+
+
+    @CrossOrigin(origins = "*")
+    @RequestMapping(value = "/petri", produces = "text/xml; charset=utf-8")
+
+    public String escapedHello(@RequestBody String jsonLog) {
+
+
+        //EventModel event = new ObjectMapper().readValue(jsonLog, EventModel.class);
+        //System.out.println(event.conceptName);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+
+            //Crea una lista di eventi letti dal JSON fornito dalla richiesta
+            List<EventModel> myEvents = mapper.readValue(jsonLog, new TypeReference<List<EventModel>>() {});
+
+            //Mostra ogni evento acquisito
+            for (EventModel event : myEvents)
+                System.out.println(event.conceptName + "   " + event.type + "   " + event.lifecycleTransition);
+
+
+            // Create document
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = null;
+            try {
+                docBuilder = docFactory.newDocumentBuilder();
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            }
+
+
+            // Creation of a document
+            Document doc = docBuilder.newDocument();
+
+
+            // Root element
+            Element log = this.generateRoot(doc);
+
+            //Headers element
+            this.generateHeaders(doc, log);
+
+
+            //Genero eventi acquisiti
+            ArrayList<Element> events1 = new ArrayList<>();
+            for (int i = 0; i < myEvents.size(); i++)
+                events1.add(generateEvent(doc, myEvents.get(i)));
+
+            //Genero tracce
+            generateTrace(doc, log, events1);
+
+
+            TransformerFactory tf = TransformerFactory.newInstance();
+            try {
+                Transformer transformer = tf.newTransformer();
+                StringWriter writer = new StringWriter();
+                transformer.transform(new DOMSource(doc), new StreamResult(writer));
+
+                String escapedOne = StringEscapeUtils.escapeJava(writer.getBuffer().toString());
+
+                System.out.println(escapedOne);
+
+                //TODO dont forget to add an another endpoint for escaped Logs for prom
+                //return writer.getBuffer().toString();
+
+                return escapedOne;
 
 
             } catch (TransformerConfigurationException e) {
@@ -171,7 +257,7 @@ public class helloController {
 
         Element globalTraceChild1 = doc.createElement("string");
         globalTraceChild1.setAttribute("key", "concept:name");
-        globalTraceChild1.setAttribute("value", "");
+        globalTraceChild1.setAttribute("value", "name");
 
 
         globalTrace.appendChild(globalTraceChild1);
@@ -183,15 +269,15 @@ public class helloController {
 
         Element globalEventChild1 = doc.createElement("string");
         globalEventChild1.setAttribute("key", "concept:name");
-        globalEventChild1.setAttribute("value", "");
+        globalEventChild1.setAttribute("value", "string");
 
         Element globalEventChild2 = doc.createElement("string");
         globalEventChild2.setAttribute("key", "type");
-        globalEventChild2.setAttribute("value", "");
+        globalEventChild2.setAttribute("value", "string");
 
         Element globalEventChild3 = doc.createElement("date");
         globalEventChild3.setAttribute("key", "time:timestamp");
-        globalEventChild3.setAttribute("value", "");
+        globalEventChild3.setAttribute("value", "2019-02-14T13:33:46.821+01:00");
 
         globalEvent.appendChild(globalEventChild1);
         globalEvent.appendChild(globalEventChild2);
@@ -205,17 +291,10 @@ public class helloController {
 	    */
 
         Element classifierTime = doc.createElement("classifier");
-        classifierTime.setAttribute("name", "Event Name");
+        classifierTime.setAttribute("name", "Activity");
         classifierTime.setAttribute("key", "concept:name");
 
-
-        Element classifier2Time = doc.createElement("classifier");
-        classifier2Time.setAttribute("name", "Event Name and TimeStamp");
-        classifier2Time.setAttribute("key", "concept:name time:timestamp");
-
-
         log.appendChild(classifierTime);
-        log.appendChild(classifier2Time);
 
 
     }
